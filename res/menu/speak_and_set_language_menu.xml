@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:usbong="http://schemas.android.com/apk/res-auto">
+	<item android:id="@+id/request"
+		  android:title="Request"
+	/>		    	    
+    <item android:id="@+id/account"
+		  android:title="Account"
+	/>		    	
+	<item android:id="@+id/about"
+		  android:title="About"
+	/>			
+</menu>

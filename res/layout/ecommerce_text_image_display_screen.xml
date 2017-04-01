@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	style="@style/UsbongSpecialParentLayout"
+	android:id="@+id/parent_layout_id"       	
+	>
+	<FrameLayout 
+	    android:layout_width="fill_parent" 
+	    android:layout_height="wrap_content"
+	    android:background="@drawable/brand_bg">
+	    <ImageView android:id="@+id/brand_logo"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:background="@drawable/brand_logo"				    
+		/>
+		<TextView
+	        android:text="@string/brand_motto"
+	        android:textSize="18sp"
+	        android:textStyle="bold"
+	        android:textColor="#6f5630"
+	        android:layout_height="fill_parent"
+	        android:layout_width="fill_parent"
+	        android:layout_gravity="center_vertical"
+	        android:gravity="right"/>				
+	</FrameLayout>
+	<ScrollView style="@style/UsbongDefaultScrollView"
+	>		 	
+	<LinearLayout style="@style/UsbongTextImageMainLayout">
+		<TextView android:id="@+id/text_image_display_textview"
+		    style="@style/UsbongDefaultTextView"	    	
+		    android:text="@string/default_textview" 
+		    android:textSize="24dp"
+		    android:gravity="left"
+		/>
+	    
+	    <ImageView android:id="@+id/image_display_imageview"
+		    style="@style/UsbongTextImageDisplayImageView"	    	
+		/>
+	</LinearLayout>	
+	</ScrollView>	
+	<LinearLayout
+		style="@style/UsbongDefaultBuySellRequestButtonLayout">	
+		<Button android:id="@+id/confirm_button"
+		    style="@style/UsbongDefaultBuySellRequestButton"
+			android:text="@string/buy" 
+			android:layout_width="256dp"
+			android:background="@drawable/button_yellow"/>		    
+	</LinearLayout>	
+</LinearLayout>

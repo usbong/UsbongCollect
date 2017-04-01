@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:background="@drawable/bg"
+	android:orientation="vertical"
+>
+	<FrameLayout 
+	    android:layout_width="fill_parent" 
+	    android:layout_height="wrap_content"
+	    android:background="@drawable/brand_bg">
+	    <ImageView android:id="@+id/brand_logo"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:background="@drawable/brand_logo"				    
+		/>
+		<TextView
+	        android:text="@string/brand_motto"
+	        android:textSize="15sp"
+	        android:textStyle="bold"
+	        android:textColor="#6f5630"
+	        android:layout_height="fill_parent"
+	        android:layout_width="fill_parent"
+	        android:layout_gravity="center_vertical"
+	        android:gravity="right"/>				
+	</FrameLayout>
+	<LinearLayout
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:orientation="horizontal"
+	android:background="#706f5630"
+	>
+		<Button 
+		    android:id="@+id/books_button"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:textColor="#554223"
+		    android:textStyle="bold"
+		    android:background="@android:color/transparent"		    
+		    android:text="Books"
+		    />
+		<Button 
+		    android:id="@+id/combos_button"		    
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:textColor="#554223"
+		    android:background="@android:color/transparent"		    
+		    android:text="Combos"
+		    />
+	</LinearLayout>
+	<ListView
+		android:id="@+id/tree_list_view"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:cacheColorHint="#FFFFFF"
+		android:divider="#6d8f48"
+		android:dividerHeight="3dp"
+		android:layout_marginLeft="6dp"
+		android:layout_marginRight="6dp"
+	/>
+</LinearLayout>
