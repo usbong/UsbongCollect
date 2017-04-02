@@ -264,10 +264,10 @@ public class UsbongDecisionTreeEngineActivity extends AppCompatActivity implemen
         	UsbongUtils.hasUnlockedLocalLanguages=true;
         	UsbongUtils.hasUnlockedForeignLanguages=true;        	
         }
-
+/*//commented out by Mike, 20170402
     	//edited by Mike, 20160417
     	UsbongUtils.USBONG_TREES_FILE_PATH = UsbongDecisionTreeEngineActivity.getInstance().getCacheDir().getAbsolutePath() + UsbongUtils.myAppTreeFolder;
-
+*/
         //added by Mike, 20151212
 //    	UsbongUtils.USBONG_TREES_FILE_PATH = UsbongDecisionTreeEngineActivity.getInstance().getCacheDir().getAbsolutePath() + "/usbong_kuto/" + "usbong_kuto_trees/";
 //    	UsbongUtils.USBONG_TREES_FILE_PATH = UsbongDecisionTreeEngineActivity.getInstance().getApplicationContext().getExternalCacheDir().getAbsolutePath() + "/usbong_kuto/" + "usbong_kuto_trees/";
@@ -389,6 +389,32 @@ public class UsbongDecisionTreeEngineActivity extends AppCompatActivity implemen
   			//added by Mike, 20170330
   			UsbongUtils.storeAssetsFileIntoSDCard(this, UsbongConstants.ITEMS_LIST_BOOKS+".txt");  
   			UsbongUtils.storeAssetsFileIntoSDCard(this, UsbongConstants.ITEMS_LIST_COMBOS+".txt");  
+            
+  			//added by Mike, 2017042
+  			UsbongUtils.createFolderInSDCard(this, UsbongConstants.ITEMS_LIST_BOOKS);    			
+  	        ArrayList<String> listOfTreesArrayList = UsbongUtils.getItemArrayList(UsbongUtils.USBONG_TREES_FILE_PATH +UsbongConstants.ITEMS_LIST_BOOKS+".txt");
+  	        for (int i=0; i< listOfTreesArrayList.size(); i++) {
+  	            final String imageFileName = listOfTreesArrayList.get(i).toString().substring(0, listOfTreesArrayList.get(i).indexOf("\nAuthor:"))
+  	            		.replace("Title: ","")
+  	            		.replace("f","")
+  	            		.replace("'","")
+  	            		.replace(":","")+".jpg"; //edited by Mike, 20170202
+
+  	        	UsbongUtils.storeAssetsFileIntoSDCard(this, imageFileName, UsbongConstants.ITEMS_LIST_BOOKS+"/");    	        	
+  	        }  			
+  	        
+  			UsbongUtils.createFolderInSDCard(this, UsbongConstants.ITEMS_LIST_COMBOS);    			
+  	        listOfTreesArrayList = UsbongUtils.getItemArrayList(UsbongUtils.USBONG_TREES_FILE_PATH +UsbongConstants.ITEMS_LIST_COMBOS+".txt");
+  	        for (int i=0; i< listOfTreesArrayList.size(); i++) {
+  	            final String imageFileName = listOfTreesArrayList.get(i).toString().substring(0, listOfTreesArrayList.get(i).indexOf("\nAuthor:"))
+  	            		.replace("Title: ","")
+  	            		.replace("f","")
+  	            		.replace("'","")
+  	            		.replace(":","")+".jpg"; //edited by Mike, 20170202
+
+  	        	UsbongUtils.storeAssetsFileIntoSDCard(this, imageFileName, UsbongConstants.ITEMS_LIST_COMBOS+"/");    	        	
+  	        }  			
+
 /*
   			//added by Mike, 20160126
   			UsbongUtils.storeAssetsFileIntoSDCard(this, UsbongConstants.ITEMS_LIST+".txt");  
@@ -660,7 +686,7 @@ public class UsbongDecisionTreeEngineActivity extends AppCompatActivity implemen
             }
         });    
 
-        if (currCategory==UsbongConstants.ITEMS_LIST_BOOKS) {
+        if (currCategory.equals(UsbongConstants.ITEMS_LIST_BOOKS)) {
             booksButton.setTypeface(Typeface.DEFAULT_BOLD);
             combosButton.setTypeface(Typeface.DEFAULT);
         }

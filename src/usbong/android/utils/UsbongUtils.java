@@ -655,6 +655,28 @@ public class UsbongUtils {
     	}
     }
 */    
+    public static void createFolderInSDCard(Activity a, String folderName) throws IOException {
+    	String destination = USBONG_TREES_FILE_PATH + folderName;
+
+    	File file = new File(destination);
+    	if (file.exists()) {
+        	file.delete();
+    	}
+		file.mkdirs();
+    }
+
+    //added by Mike, 20170402
+    public static void storeAssetsFileIntoSDCard(Activity a, String filename, String dest) throws IOException {
+    	String destination = USBONG_TREES_FILE_PATH+dest;
+
+    	File file = new File(destination);
+    	if (file.exists()) {
+        	file.delete();    		
+    	}
+    	file.mkdirs();
+		copyAssetToSDCard(filename, destination); //added by Mike, 30 April 2015
+    }
+    
     public static void storeAssetsFileIntoSDCard(Activity a, String filename) throws IOException {
     	String destination = USBONG_TREES_FILE_PATH;//+"dash.utree";
 
@@ -3337,7 +3359,7 @@ public class UsbongUtils {
 
     //added by JP, 26 May 2015
 	public static String parseYouTubeLink(String l) {
-		String pattern = "(?<=watch\\?v=|/videos/|embed\\/|youtu.be\\/|\\/v\\/|watch\\?v%3D|%2Fvideos%2F|embed%鬩包ｽｯ�ｽ�ｶ髯橸ｽｽ�ｽ�ｯ�ｽ�ｽ�ｽ�ｽ2F|youtu.be%2F|%2Fv%2F)[^#\\&\\?\n]*";
+		String pattern = "(?<=watch\\?v=|/videos/|embed\\/|youtu.be\\/|\\/v\\/|watch\\?v%3D|%2Fvideos%2F|embed%鬯ｩ蛹�ｽｽ�ｯ�ｽ�ｽ�ｽ�ｶ鬮ｯ讖ｸ�ｽ�ｽ�ｽ�ｽ�ｽ�ｯ�ｽ�ｽ�ｽ�ｽ�ｽ�ｽ�ｽ�ｽ2F|youtu.be%2F|%2Fv%2F)[^#\\&\\?\n]*";
 
 		Pattern compiledPattern = Pattern.compile(pattern);
 	    Matcher matcher = compiledPattern.matcher(l);
