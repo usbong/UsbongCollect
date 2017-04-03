@@ -903,13 +903,13 @@ public class RequestActivity extends AppCompatActivity/*Activity*/
 				inAppSettingsDialog.show();
 					return true;
 */					
-			case(R.id.sell): //added by Mike, 20170308
+			case(R.id.add_item): //added by Mike, 20170308
 				finish();
 				//added by Mike, 20170216
-				Intent toSellActivityIntent = new Intent().setClass(getInstance(), SellActivity.class);
-				toSellActivityIntent.putExtra("newSellActivity", true); //added by Mike, 20170328
-				toSellActivityIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				startActivity(toSellActivityIntent);
+				Intent toAddItemActivityIntent = new Intent().setClass(getInstance(), AddItemActivity.class);
+				toAddItemActivityIntent.putExtra("newAddItemActivity", true); //added by Mike, 20170328
+				toAddItemActivityIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(toAddItemActivityIntent);
 				return true;
 			case(R.id.request):
 				finish();
