@@ -49,6 +49,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.content.res.Resources.NotFoundException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
@@ -248,6 +249,8 @@ public class UsbongDecisionTreeEngineActivity extends AppCompatActivity implemen
 	//added by Mike, 20170216
 	private BuyActivity myBuyActivity;
 	
+	private static boolean hasPerformedInit;
+	
 //	@SuppressLint("InlinedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -295,7 +298,6 @@ public class UsbongDecisionTreeEngineActivity extends AppCompatActivity implemen
     public void init() {    	
     	//added by Mike, 20170310
     	UsbongUtils.deleteRecursive(new File(UsbongUtils.BASE_FILE_PATH_TEMP));
-
     	
         //if return is null, then currScreen=0
 //        currScreen=Integer.parseInt(getIntent().getStringExtra("currScreen")); 
@@ -369,59 +371,63 @@ public class UsbongDecisionTreeEngineActivity extends AppCompatActivity implemen
     	usedBackButton=false;
     	currAnswer="";    	    	
     	
-    	try{    		
-    		//commented out by Mike, 4 Oct. 2015
-  			UsbongUtils.createUsbongFileStructure();
-  			
-  			//added by Mike, 20160417
-  			UsbongUtils.initUsbongConfigFile();
- 
-    		//create the usbong_demo_tree and store it in sdcard/usbong/usbong_trees
-//    		UsbongUtils.storeAssetsFileIntoSDCard(this,"usbong_demo_tree.xml");
-/*    		UsbongUtils.storeAssetsFileIntoSDCard(this,UsbongUtils.DEFAULT_UTREE_TO_LOAD+".utree");
- */
-/*  //commented out by Mike, 20170327
-  			//edited by Mike, 20160119
-  			UsbongUtils.storeAssetsFileIntoSDCard(this, UsbongConstants.TREE_TYPE_SELL+".utree");
-  			UsbongUtils.storeAssetsFileIntoSDCard(this, UsbongConstants.TREE_TYPE_REQUEST+".utree");  			
-  			UsbongUtils.storeAssetsFileIntoSDCard(this, UsbongConstants.TREE_TYPE_BUY+".utree"); //added by Mike, 20160126  			
-*/  			
-  			//added by Mike, 20170330
-  			UsbongUtils.storeAssetsFileIntoSDCard(this, UsbongConstants.ITEMS_LIST_BOOKS+".txt");  
-  			UsbongUtils.storeAssetsFileIntoSDCard(this, UsbongConstants.ITEMS_LIST_COMBOS+".txt");  
-            
-  			//added by Mike, 2017042
-  			UsbongUtils.createFolderInSDCard(this, UsbongConstants.ITEMS_LIST_BOOKS);    			
-  	        ArrayList<String> listOfTreesArrayList = UsbongUtils.getItemArrayList(UsbongUtils.USBONG_TREES_FILE_PATH +UsbongConstants.ITEMS_LIST_BOOKS+".txt");
-  	        for (int i=0; i< listOfTreesArrayList.size(); i++) {
-  	            final String imageFileName = listOfTreesArrayList.get(i).toString().substring(0, listOfTreesArrayList.get(i).indexOf("\nAuthor:"))
-  	            		.replace("Title: ","")
-  	            		.replace("Åf","")
-  	            		.replace("'","")
-  	            		.replace(":","")+".jpg"; //edited by Mike, 20170202
+    	if (!hasPerformedInit) {
+        	try{    		
+        		//commented out by Mike, 4 Oct. 2015
+      			UsbongUtils.createUsbongFileStructure();
+      			
+      			//added by Mike, 20160417
+      			UsbongUtils.initUsbongConfigFile();
+     
+        		//create the usbong_demo_tree and store it in sdcard/usbong/usbong_trees
+//        		UsbongUtils.storeAssetsFileIntoSDCard(this,"usbong_demo_tree.xml");
+    /*    		UsbongUtils.storeAssetsFileIntoSDCard(this,UsbongUtils.DEFAULT_UTREE_TO_LOAD+".utree");
+     */
+    /*  //commented out by Mike, 20170327
+      			//edited by Mike, 20160119
+      			UsbongUtils.storeAssetsFileIntoSDCard(this, UsbongConstants.TREE_TYPE_SELL+".utree");
+      			UsbongUtils.storeAssetsFileIntoSDCard(this, UsbongConstants.TREE_TYPE_REQUEST+".utree");  			
+      			UsbongUtils.storeAssetsFileIntoSDCard(this, UsbongConstants.TREE_TYPE_BUY+".utree"); //added by Mike, 20160126  			
+    */  			
+      			//added by Mike, 20170330
+      			UsbongUtils.storeAssetsFileIntoSDCard(this, UsbongConstants.ITEMS_LIST_BOOKS+".txt");  
+      			UsbongUtils.storeAssetsFileIntoSDCard(this, UsbongConstants.ITEMS_LIST_COMBOS+".txt");  
+                
+      			//added by Mike, 2017042
+      			UsbongUtils.createFolderInSDCard(this, UsbongConstants.ITEMS_LIST_BOOKS);    			
+      	        ArrayList<String> listOfTreesArrayList = UsbongUtils.getItemArrayList(UsbongUtils.USBONG_TREES_FILE_PATH +UsbongConstants.ITEMS_LIST_BOOKS+".txt");
+      	        for (int i=0; i< listOfTreesArrayList.size(); i++) {
+      	            final String imageFileName = listOfTreesArrayList.get(i).toString().substring(0, listOfTreesArrayList.get(i).indexOf("\nAuthor:"))
+      	            		.replace("Title: ","")
+      	            		.replace("Åf","")
+      	            		.replace("'","")
+      	            		.replace(":","")+".jpg"; //edited by Mike, 20170202
 
-  	        	UsbongUtils.storeAssetsFileIntoSDCard(this, imageFileName, UsbongConstants.ITEMS_LIST_BOOKS+"/");    	        	
-  	        }  			
-  	        
-  			UsbongUtils.createFolderInSDCard(this, UsbongConstants.ITEMS_LIST_COMBOS);    			
-  	        listOfTreesArrayList = UsbongUtils.getItemArrayList(UsbongUtils.USBONG_TREES_FILE_PATH +UsbongConstants.ITEMS_LIST_COMBOS+".txt");
-  	        for (int i=0; i< listOfTreesArrayList.size(); i++) {
-  	            final String imageFileName = listOfTreesArrayList.get(i).toString().substring(0, listOfTreesArrayList.get(i).indexOf("\nAuthor:"))
-  	            		.replace("Title: ","")
-  	            		.replace("Åf","")
-  	            		.replace("'","")
-  	            		.replace(":","")+".jpg"; //edited by Mike, 20170202
+      	        	UsbongUtils.storeAssetsFileIntoSDCard(this, imageFileName, UsbongConstants.ITEMS_LIST_BOOKS+"/");    	        	
+      	        }  			
+      	        
+      			UsbongUtils.createFolderInSDCard(this, UsbongConstants.ITEMS_LIST_COMBOS);    			
+      	        listOfTreesArrayList = UsbongUtils.getItemArrayList(UsbongUtils.USBONG_TREES_FILE_PATH +UsbongConstants.ITEMS_LIST_COMBOS+".txt");
+      	        for (int i=0; i< listOfTreesArrayList.size(); i++) {
+      	            final String imageFileName = listOfTreesArrayList.get(i).toString().substring(0, listOfTreesArrayList.get(i).indexOf("\nAuthor:"))
+      	            		.replace("Title: ","")
+      	            		.replace("Åf","")
+      	            		.replace("'","")
+      	            		.replace(":","")+".jpg"; //edited by Mike, 20170202
 
-  	        	UsbongUtils.storeAssetsFileIntoSDCard(this, imageFileName, UsbongConstants.ITEMS_LIST_COMBOS+"/");    	        	
-  	        }  			
+      	        	UsbongUtils.storeAssetsFileIntoSDCard(this, imageFileName, UsbongConstants.ITEMS_LIST_COMBOS+"/");    	        	
+      	        }  			
 
-/*
-  			//added by Mike, 20160126
-  			UsbongUtils.storeAssetsFileIntoSDCard(this, UsbongConstants.ITEMS_LIST+".txt");  
-*/  			
-    	}
-    	catch(IOException ioe) {
-    		ioe.printStackTrace();
+    /*
+      			//added by Mike, 20160126
+      			UsbongUtils.storeAssetsFileIntoSDCard(this, UsbongConstants.ITEMS_LIST+".txt");  
+    */  			
+        	}
+        	catch(IOException ioe) {
+        		ioe.printStackTrace();
+        	}
+        	
+        	hasPerformedInit=true;
     	}
     	
     	//Reference: http://stackoverflow.com/questions/2793004/java-lista-addalllistb-fires-nullpointerexception
@@ -3530,17 +3536,39 @@ public class UsbongDecisionTreeEngineActivity extends AppCompatActivity implemen
 //            					.replace("\nDetails:", "\n<b>Details:</b>")
             					.replace("\nLanguage:", "\n<b>Language:</b>")
             					.replace("\n", "<br>");
-
+/*
 	            		//Reference: http://www.anddev.org/tinytut_-_get_resources_by_name__getidentifier_-t460.html; last accessed 14 Sept 2011
 	                    Resources myRes = instance.getResources();
+*/	                    
 	                    final String imageFileName = o.toString().substring(0, o.toString().indexOf("\nAuthor:"))
 	                    		.replace("Title: ","")
 	                    		.replace("Åf","")
 	                    		.replace("'","")
 	                    		.replace(":","")+".jpg"; //edited by Mike, 20170202
-	                    final Drawable myDrawableImage = Drawable.createFromStream(myRes.getAssets().open(imageFileName), null); //edited by Mike, 20170202
+/*	                    final Drawable myDrawableImage = Drawable.createFromStream(myRes.getAssets().open(imageFileName), null); //edited by Mike, 20170202
 	            		final ImageView image = (ImageView) v.findViewById(R.id.tree_item_image_view);
-		            	
+*/
+	            		ImageView image = (ImageView) v.findViewById(R.id.tree_item_image_view);
+
+	            		String path = UsbongUtils.USBONG_TREES_FILE_PATH + currCategory+"/"+imageFileName;
+	            		File imageFile = new File(path);	                    
+	                    if(imageFile.exists())
+	                    {	                    
+	                    	Bitmap myBitmap = BitmapFactory.decodeFile(path);
+	                    	Bitmap rescaledMyBitmap = Bitmap.createScaledBitmap(myBitmap, myBitmap.getWidth()/10*7, myBitmap.getHeight()/10*7, false); //reduce to 70% size; bitmaps produces larger than actual image size
+	                    	if(myBitmap != null)
+	                    	{
+	                    		image.setImageBitmap(rescaledMyBitmap);
+	             			}	             
+	                    	//Read more: http://www.brighthub.com/mobile/google-android/articles/64048.aspx#ixzz0yXLCazcU                	  
+	                	}
+	                    else {
+		            		//Reference: http://www.anddev.org/tinytut_-_get_resources_by_name__getidentifier_-t460.html; last accessed 14 Sept 2011
+		                    Resources myRes = instance.getResources();
+	                    	Drawable myDrawableImage = Drawable.createFromStream(myRes.getAssets().open(UsbongConstants.NO_IMAGE_FILENAME), null);       	                    	
+		                	image.setImageDrawable(myDrawableImage);                		
+	                    }
+
 	                	dataCurrentTextView.setText(Html.fromHtml(s));
 //	                	dataCurrentTextView.setText(o.toString());
 	                	dataCurrentTextView.setOnClickListener(new OnClickListener() {
@@ -3560,7 +3588,9 @@ public class UsbongDecisionTreeEngineActivity extends AppCompatActivity implemen
 	            				startActivityForResult(toBuyActivityIntent,1);
 	            			}
 	                	});
-                		image.setImageDrawable(myDrawableImage);                		
+/*
+	                	image.setImageDrawable(myDrawableImage);                		
+*/	                	
 /*
                 		//added by Mike, 20170203
                 		//make the image icon in the list smaller

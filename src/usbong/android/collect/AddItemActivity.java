@@ -159,41 +159,62 @@ public class AddItemActivity extends AppCompatActivity/*Activity*/
     	addButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {		
-					if (verifyFields()) {													        
-						StringBuffer requestSummary = new StringBuffer();
-						requestSummary.append("-Add Item Summary-\n");					
-						requestSummary.append("Book Title: "+
-								((TextView)findViewById(R.id.book_title)).getText().toString()+"\n");
-
-						requestSummary.append("First Name of Principal Author:\n"+
-								((TextView)findViewById(R.id.first_name_of_principal_author)).getText().toString()+"\n");
-
-						requestSummary.append("Surname of Principal Author:\n"+
-								((TextView)findViewById(R.id.surname_of_principal_author)).getText().toString()+"\n");
-						
-						RadioGroup languageRadioButtonGroup = (RadioGroup)findViewById(R.id.language_radiogroup);
-						int languageRadioButtonID = languageRadioButtonGroup.getCheckedRadioButtonId();				
-						RadioButton languageRadioButton = (RadioButton) languageRadioButtonGroup.findViewById(languageRadioButtonID);
-						String languageSelectedText = languageRadioButton.getText().toString();	 
-						requestSummary.append("Language: "+languageSelectedText+"\n");    	
+					if (verifyFields()) {		
+				    	try {	    	
+							//read actual file, and write to temp file first
+				 			InputStreamReader reader = UsbongUtils.getFileFromSDCardAsReader(UsbongUtils.USBONG_TREES_FILE_PATH+UsbongConstants.ITEMS_LIST_BOOKS+".txt");
+				 			BufferedReader br = new BufferedReader(reader);
+				 	    	String currLineString;        	
 	
-						if (languageSelectedText.equals("Other")) {
-							requestSummary.append(((TextView)findViewById(R.id.other_language)).getText().toString()+"\n");
-						}
-
-						requestSummary.append("Price:\n"+
-								((TextView)findViewById(R.id.price)).getText().toString()+"\n");
-						requestSummary.append("-End of Summary-");    							
-											
-						//http://stackoverflow.com/questions/2197741/how-can-i-send-emails-from-my-android-application;
-						//answer by: Jeremy Logan, 20100204
-						//added by Mike, 20170220
-					    Intent i = new Intent(Intent.ACTION_SEND_MULTIPLE); //changed from ACTION_SEND to ACTION_SEND_MULTIPLE by Mike, 20170313
-					    i.setType("message/rfc822"); //remove all non-email apps that support send intent from chooser
-					    i.putExtra(Intent.EXTRA_EMAIL  , new String[]{UsbongConstants.EMAIL_ADDRESS});
-					    i.putExtra(Intent.EXTRA_SUBJECT, "Book Request: "+((TextView)findViewById(R.id.book_title)).getText().toString());
-					    i.putExtra(Intent.EXTRA_TEXT   , requestSummary.toString());
-					    
+				 	    	//write to actual usbong.config file
+							PrintWriter out = UsbongUtils.getFileFromSDCardAsWriter(UsbongUtils.USBONG_TREES_FILE_PATH+UsbongConstants.ITEMS_LIST_BOOKS+".txt"+"TEMP");
+				 	    	while((currLineString=br.readLine())!=null)
+				 	    	{ 	
+								out.println(currLineString);			 	    		
+				 	    	}			 	    	
+				 	    	out.println("--");
+				 	    	out.println("Title: "+
+									((EditText)findViewById(R.id.book_title)).getText().toString());
+				 	    	out.println("Author: "+
+									((EditText)findViewById(R.id.first_name_of_principal_author)).getText().toString()+" "+
+									((EditText)findViewById(R.id.surname_of_principal_author)).getText().toString());
+				 	    	out.println("Price: "+
+									((EditText)findViewById(R.id.price)).getText().toString());
+	
+							RadioGroup languageRadioButtonGroup = (RadioGroup)findViewById(R.id.language_radiogroup);
+							int languageRadioButtonID = languageRadioButtonGroup.getCheckedRadioButtonId();				
+							RadioButton languageRadioButton = (RadioButton) languageRadioButtonGroup.findViewById(languageRadioButtonID);
+							String languageSelectedText = languageRadioButton.getText().toString();	 
+		
+							if (languageSelectedText.equals("Other")) {
+					 	    	out.println("Language: "+
+										((EditText)findViewById(R.id.other_language)).getText().toString());
+							}
+							else {
+					 	    	out.println("Language: English");
+							}			 	    	
+				 	    	out.close();
+				 	    	
+				 	    	//copy temp file to actual usbong.config file
+				 			InputStreamReader reader2 = UsbongUtils.getFileFromSDCardAsReader(UsbongUtils.USBONG_TREES_FILE_PATH+UsbongConstants.ITEMS_LIST_BOOKS+".txt"+"TEMP");	
+				 			BufferedReader br2 = new BufferedReader(reader2);    		
+				 	    	String currLineString2;        	
+	
+				 	    	//write to actual usbong.config file
+							PrintWriter out2 = UsbongUtils.getFileFromSDCardAsWriter(UsbongUtils.USBONG_TREES_FILE_PATH+UsbongConstants.ITEMS_LIST_BOOKS+".txt");
+	
+				 	    	while((currLineString2=br2.readLine())!=null)
+				 	    	{ 	
+								out2.println(currLineString2);			 	    		
+				 	    	}			 	    	
+				 	    	out2.close();
+				 	    	
+//				 	    	UsbongUtils.deleteRecursive(new File(UsbongUtils.USBONG_TREES_FILE_PATH+UsbongConstants.ITEMS_LIST_BOOKS+".txt"+"TEMP"));
+				    	}
+				 		catch(Exception e) {
+				 			e.printStackTrace();
+				 		}	
+/*					    
 					    //added by Mike, 20170310
 						//Reference: http://stackoverflow.com/questions/2264622/android-multiple-email-attachments-using-intent
 						//last accessed: 14 March 2012
@@ -217,6 +238,7 @@ public class AddItemActivity extends AppCompatActivity/*Activity*/
 					    } catch (android.content.ActivityNotFoundException ex) {
 					        Toast.makeText(AddItemActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
 					    }	
+*/					    
 					}
 				}					
     	});    	

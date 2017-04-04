@@ -43,6 +43,9 @@ public class UsbongConstants {
 	public final static int SELL_ACTIVITY=1;
 	public final static int REQUEST_ACTIVITY=2;
 	public final static int ITEM_LIST_ACTIVITY=3; //UsbongDecisionTreeEngineActivity		
+
+	//added by Mike, 20170404
+	public final static String NO_IMAGE_FILENAME="no_image.jpg";
 	
     //SCREEN types constants
 	public static final int YES_NO_DECISION_SCREEN=0;	
