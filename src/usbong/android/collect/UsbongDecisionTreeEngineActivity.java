@@ -3555,9 +3555,14 @@ public class UsbongDecisionTreeEngineActivity extends AppCompatActivity implemen
 	                    if(imageFile.exists())
 	                    {	                    
 	                    	Bitmap myBitmap = BitmapFactory.decodeFile(path);
-	                    	Bitmap rescaledMyBitmap = Bitmap.createScaledBitmap(myBitmap, myBitmap.getWidth()/10*7, myBitmap.getHeight()/10*7, false); //reduce to 70% size; bitmaps produces larger than actual image size
 	                    	if(myBitmap != null)
 	                    	{
+	                    		//reduce to 70% size; bitmaps produce larger than actual image size
+		                    	Bitmap rescaledMyBitmap = Bitmap.createScaledBitmap(
+		                    								myBitmap, 
+		                    								myBitmap.getWidth()/10*7, 
+		                    								myBitmap.getHeight()/10*7, 
+		                    								false);
 	                    		image.setImageBitmap(rescaledMyBitmap);
 	             			}	             
 	                    	//Read more: http://www.brighthub.com/mobile/google-android/articles/64048.aspx#ixzz0yXLCazcU                	  
