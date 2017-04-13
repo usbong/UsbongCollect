@@ -47,6 +47,12 @@ public class UsbongConstants {
 	//added by Mike, 20170404
 	public final static String NO_IMAGE_FILENAME="no_image.jpg";
 	
+	//added by Mike, 20170413
+	public final static String DEFAULT_BOOK_TITLE_HINT="Book Title";
+	public final static String DEFAULT_NAME_OF_PRINCIPAL_AUTHOR_HINT="Name of Principal Author";
+	public final static String DEFAULT_PRICE_HINT="Price";
+
+	
     //SCREEN types constants
 	public static final int YES_NO_DECISION_SCREEN=0;	
 	public static final int MULTIPLE_RADIO_BUTTONS_SCREEN=1;	

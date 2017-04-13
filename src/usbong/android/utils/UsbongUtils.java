@@ -121,6 +121,7 @@ public class UsbongUtils {
 	public static String BASE_FILE_PATH = Environment.getExternalStorageDirectory()+"/usbong_collect/";
 	public static String BASE_FILE_PATH_TEMP = BASE_FILE_PATH+"temp/";
 	public static String USBONG_TREES_FILE_PATH = BASE_FILE_PATH + "usbong_trees/"; //will be changed later in UsbongDecisionTreeEngineActivity.java
+	public static String USBONG_TREES_FILE_PATH_TEMP = USBONG_TREES_FILE_PATH + "temp/"; 
 
 	//added by Mike, 20160126
 //	public static String USBONG_ITEM_ARRAY_FILE_PATH = USBONG_TREES_FILE_PATH + UsbongConstants.ITEM_LIST; 
@@ -135,6 +136,10 @@ public class UsbongUtils {
 	
 	//added by Mike, 20160504
 	public static Activity myActivityInstance;
+	
+	//added by Mike, 20170407
+	//added by Mike, 20170406
+	public static String currCategory = UsbongConstants.ITEMS_LIST_BOOKS;
 	
 	//	public static String BASE_FILE_PATH = "/sdcard/usbong/";
 	private static String timeStamp;
@@ -764,6 +769,25 @@ public class UsbongUtils {
 
     }
 
+    //added by Mike, 20170406
+    //copy file to destination
+    public static void copyFileToDestInSDCard(String filename, String currDir, String destDir) {
+        InputStream in = null;
+        OutputStream out = null;
+        try {
+          in = new FileInputStream(currDir + filename);
+          out = new FileOutputStream(destDir + filename);
+          copyFile(in, out);
+          in.close();
+          in = null;
+          out.flush();
+          out.close();
+          out = null;
+        } catch(Exception e) {
+            Log.e("tag", e.getMessage());
+        }       
+    }
+    
     //added by Mike, 21 July 2015
     public static Uri getAudioUriFromUTree(String filename, String language) {
 /*    	

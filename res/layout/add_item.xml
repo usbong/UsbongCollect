@@ -25,6 +25,30 @@
 	        android:layout_gravity="center_vertical"
 	        android:gravity="right"/>				
 	</FrameLayout>
+	<LinearLayout
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:orientation="horizontal"
+	android:background="#706f5630"
+	>
+		<Button 
+		    android:id="@+id/books_button"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:textColor="#554223"
+		    android:textStyle="bold"
+		    android:background="@android:color/transparent"		    
+		    android:text="Books"
+		    />
+		<Button 
+		    android:id="@+id/combos_button"		    
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:textColor="#554223"
+		    android:background="@android:color/transparent"		    
+		    android:text="Combos"
+		    />
+	</LinearLayout>
 	<ScrollView style="@style/UsbongDefaultScrollView"
 	>		 	
 		<LinearLayout
@@ -53,21 +77,12 @@
 				android:contentDescription="book photo"/>		   			   	
 		   	<EditText
 	        style="@style/UsbongLoginEditText"
-	        android:id="@+id/first_name_of_principal_author"
-	        android:hint="First Name of Principal Author"
+	        android:id="@+id/name_of_principal_author"
+	        android:hint="Name of Principal Author"
 	        android:background="@drawable/rect_text_edit"
 	        android:textColorHint="#9a9898"
 	        android:padding="5dp"        
 	        android:layout_marginTop="5dp"        
-			/>
-			<EditText
-		        style="@style/UsbongLoginEditText"
-		        android:id="@+id/surname_of_principal_author"
-		        android:hint="Surname of Principal Author"
-		        android:background="@drawable/rect_text_edit"
-		        android:textColorHint="#9a9898"
-		        android:padding="5dp"        
-		        android:layout_marginTop="5dp"        
 			/>
 			<EditText
 		        style="@style/UsbongLoginEditText"

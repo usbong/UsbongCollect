@@ -26,6 +26,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -144,7 +146,36 @@ public class BuyActivity extends AppCompatActivity/*Activity*/
         	productDetails = myTextImageDisplayTextView.getText().toString();//added by Mike, 20170221
 
     		ImageView myTextImageDisplayImageView = (ImageView)findViewById(R.id.image_display_imageview);
-
+    		
+    		String path = UsbongUtils.USBONG_TREES_FILE_PATH + UsbongUtils.currCategory+"/"+getIntent().getStringExtra(UsbongConstants.ITEM_IMAGE_NAME);
+    		File imageFile = new File(path);	                    
+            if(imageFile.exists())
+            {	                    
+            	Bitmap myBitmap = BitmapFactory.decodeFile(path);
+            	if(myBitmap != null)
+            	{
+            		//reduce to 70% size; bitmaps produce larger than actual image size
+                	Bitmap rescaledMyBitmap = Bitmap.createScaledBitmap(
+                								myBitmap, 
+                								myBitmap.getWidth()/10*7, 
+                								myBitmap.getHeight()/10*7, 
+                								false);
+                	myTextImageDisplayImageView.setImageBitmap(rescaledMyBitmap);
+     			}	             
+            	//Read more: http://www.brighthub.com/mobile/google-android/articles/64048.aspx#ixzz0yXLCazcU                	  
+        	}
+            else {
+            	try {
+            		//Reference: http://www.anddev.org/tinytut_-_get_resources_by_name__getidentifier_-t460.html; last accessed 14 Sept 2011
+                    Resources myRes = getResources();
+                	Drawable myDrawableImage = Drawable.createFromStream(myRes.getAssets().open(UsbongConstants.NO_IMAGE_FILENAME), null);       	                    	
+                	myTextImageDisplayImageView.setImageDrawable(myDrawableImage);                		            		
+            	}
+            	catch (Exception e) {
+            		e.printStackTrace();
+            	}
+            }
+/*    		
     		//Reference: http://www.anddev.org/tinytut_-_get_resources_by_name__getidentifier_-t460.html; last accessed 14 Sept 2011
             Resources myRes = getResources();
             try {
@@ -162,6 +193,7 @@ public class BuyActivity extends AppCompatActivity/*Activity*/
             catch (Exception e) {
             	e.printStackTrace();
             }            		
+*/            
     	}
     	else { //if account screen
 		    //Reference: http://stackoverflow.com/questions/23024831/android-shared-preferences-example

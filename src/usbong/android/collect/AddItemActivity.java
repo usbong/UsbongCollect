@@ -35,6 +35,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -64,6 +65,10 @@ import android.widget.Toast;
  */
 public class AddItemActivity extends AppCompatActivity/*Activity*/ 
 {	
+	//added by Mike, 20170406
+    private Button booksButton;
+    private Button combosButton;
+	
 	private boolean isSendingData;
 
 	//edited by Mike, 20170225
@@ -96,8 +101,8 @@ public class AddItemActivity extends AppCompatActivity/*Activity*/
 	private static Activity myActivityInstance;
 	private ProgressDialog myProgressDialog;
 	
-    private AlertDialog inAppSettingsDialog; //added by Mike, 20160417
-
+    private AlertDialog inAppSettingsDialog; //added by Mike, 20160417    
+    
     @Override
     public void onCreate(Bundle savedInstanceState) 
     {
@@ -137,6 +142,39 @@ public class AddItemActivity extends AppCompatActivity/*Activity*/
 //    	return instance;
     	return myActivityInstance;
     }
+
+    //added by Mike, 20170406
+    public void updateCategoryTypeface() {
+        if (UsbongUtils.currCategory.equals(UsbongConstants.ITEMS_LIST_BOOKS)) {
+            booksButton.setTypeface(Typeface.DEFAULT_BOLD);
+            combosButton.setTypeface(Typeface.DEFAULT);
+        }
+        else {
+            booksButton.setTypeface(Typeface.DEFAULT);
+            combosButton.setTypeface(Typeface.DEFAULT_BOLD);            
+        }
+    }
+    
+    public void updateCategoryItemsList() {
+        //added by Mike, 20170413
+    	TextView bookTitleTextView = ((TextView)findViewById(R.id.book_title));
+    	TextView nameOfPrincipalAuthorTextView = ((TextView)findViewById(R.id.name_of_principal_author));
+    	TextView priceTextView = ((TextView)findViewById(R.id.price));
+
+    	switch (UsbongUtils.currCategory) {
+    		case UsbongConstants.ITEMS_LIST_COMBOS:
+	        	bookTitleTextView.setHint("Book Titles");
+	        	nameOfPrincipalAuthorTextView.setHint("Names of Principal Authors");
+	        	priceTextView.setHint("Total Price");
+	        	break;
+    		case UsbongConstants.ITEMS_LIST_BOOKS:
+	        	bookTitleTextView.setHint(UsbongConstants.DEFAULT_BOOK_TITLE_HINT);
+	        	nameOfPrincipalAuthorTextView.setHint(UsbongConstants.DEFAULT_NAME_OF_PRINCIPAL_AUTHOR_HINT);
+	        	priceTextView.setHint(UsbongConstants.DEFAULT_PRICE_HINT);
+	        	break;
+
+    	}
+    }
     
     /*
      * Initialize this activity
@@ -154,6 +192,28 @@ public class AddItemActivity extends AppCompatActivity/*Activity*/
 	    RadioGroup formatRadioButtonGroup = ((RadioGroup)findViewById(R.id.language_radiogroup));
 		((RadioButton)formatRadioButtonGroup.getChildAt(0)).setChecked(true);		    	  
     	
+		//added by Mike, 20170406
+		booksButton = (Button)findViewById(R.id.books_button);
+        booksButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            	UsbongUtils.currCategory = UsbongConstants.ITEMS_LIST_BOOKS;            
+            	updateCategoryTypeface();
+            	updateCategoryItemsList();
+            }
+        });    
+
+        combosButton = (Button)findViewById(R.id.combos_button);
+        combosButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            	UsbongUtils.currCategory = UsbongConstants.ITEMS_LIST_COMBOS;            
+            	updateCategoryTypeface();
+            	updateCategoryItemsList();
+            }
+        });    
+
+                
     	//added by Mike, 20170403
     	addButton = (Button)findViewById(R.id.add_button);    	
     	addButton.setOnClickListener(new OnClickListener() {
@@ -162,12 +222,12 @@ public class AddItemActivity extends AppCompatActivity/*Activity*/
 					if (verifyFields()) {		
 				    	try {	    	
 							//read actual file, and write to temp file first
-				 			InputStreamReader reader = UsbongUtils.getFileFromSDCardAsReader(UsbongUtils.USBONG_TREES_FILE_PATH+UsbongConstants.ITEMS_LIST_BOOKS+".txt");
+				 			InputStreamReader reader = UsbongUtils.getFileFromSDCardAsReader(UsbongUtils.USBONG_TREES_FILE_PATH+UsbongUtils.currCategory+".txt");
 				 			BufferedReader br = new BufferedReader(reader);
 				 	    	String currLineString;        	
 	
 				 	    	//write to actual usbong.config file
-							PrintWriter out = UsbongUtils.getFileFromSDCardAsWriter(UsbongUtils.USBONG_TREES_FILE_PATH+UsbongConstants.ITEMS_LIST_BOOKS+".txt"+"TEMP");
+							PrintWriter out = UsbongUtils.getFileFromSDCardAsWriter(UsbongUtils.USBONG_TREES_FILE_PATH+UsbongUtils.currCategory+".txt"+"TEMP");
 				 	    	while((currLineString=br.readLine())!=null)
 				 	    	{ 	
 								out.println(currLineString);			 	    		
@@ -176,8 +236,7 @@ public class AddItemActivity extends AppCompatActivity/*Activity*/
 				 	    	out.println("Title: "+
 									((EditText)findViewById(R.id.book_title)).getText().toString());
 				 	    	out.println("Author: "+
-									((EditText)findViewById(R.id.first_name_of_principal_author)).getText().toString()+" "+
-									((EditText)findViewById(R.id.surname_of_principal_author)).getText().toString());
+									((EditText)findViewById(R.id.name_of_principal_author)).getText().toString());
 				 	    	out.println("Price: "+
 									((EditText)findViewById(R.id.price)).getText().toString());
 	
@@ -196,12 +255,12 @@ public class AddItemActivity extends AppCompatActivity/*Activity*/
 				 	    	out.close();
 				 	    	
 				 	    	//copy temp file to actual usbong.config file
-				 			InputStreamReader reader2 = UsbongUtils.getFileFromSDCardAsReader(UsbongUtils.USBONG_TREES_FILE_PATH+UsbongConstants.ITEMS_LIST_BOOKS+".txt"+"TEMP");	
+				 			InputStreamReader reader2 = UsbongUtils.getFileFromSDCardAsReader(UsbongUtils.USBONG_TREES_FILE_PATH+UsbongUtils.currCategory+".txt"+"TEMP");	
 				 			BufferedReader br2 = new BufferedReader(reader2);    		
 				 	    	String currLineString2;        	
 	
 				 	    	//write to actual usbong.config file
-							PrintWriter out2 = UsbongUtils.getFileFromSDCardAsWriter(UsbongUtils.USBONG_TREES_FILE_PATH+UsbongConstants.ITEMS_LIST_BOOKS+".txt");
+							PrintWriter out2 = UsbongUtils.getFileFromSDCardAsWriter(UsbongUtils.USBONG_TREES_FILE_PATH+UsbongUtils.currCategory+".txt");
 	
 				 	    	while((currLineString2=br2.readLine())!=null)
 				 	    	{ 	
@@ -210,10 +269,26 @@ public class AddItemActivity extends AppCompatActivity/*Activity*/
 				 	    	out2.close();
 				 	    	
 //				 	    	UsbongUtils.deleteRecursive(new File(UsbongUtils.USBONG_TREES_FILE_PATH+UsbongConstants.ITEMS_LIST_BOOKS+".txt"+"TEMP"));
+				 	    	UsbongUtils.deleteRecursive(new File(UsbongUtils.USBONG_TREES_FILE_PATH+UsbongUtils.currCategory+".txt"+"TEMP"));
 				    	}
 				 		catch(Exception e) {
 				 			e.printStackTrace();
 				 		}	
+
+				    	//added by Mike, 20170406
+				    	//copy image file to correct destination
+						String path = UsbongUtils.BASE_FILE_PATH_TEMP + myPictureName +".jpg";								
+						String destDir = UsbongUtils.USBONG_TREES_FILE_PATH+UsbongUtils.currCategory+"/";
+						String destFilename = ((EditText)findViewById(R.id.book_title)).getText().toString()+".jpg";				    	
+						
+						File imageFile = new File(path);	
+				    	
+				        if(imageFile.exists())
+				        {
+				        	UsbongUtils.copyFileToDestInSDCard(myPictureName +".jpg", UsbongUtils.BASE_FILE_PATH_TEMP, destDir);				        
+				    	}
+				        imageFile.renameTo(new File(destDir, destFilename));
+				    	
 /*					    
 					    //added by Mike, 20170310
 						//Reference: http://stackoverflow.com/questions/2264622/android-multiple-email-attachments-using-intent
@@ -239,6 +314,12 @@ public class AddItemActivity extends AppCompatActivity/*Activity*/
 					        Toast.makeText(AddItemActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
 					    }	
 */					    
+				        
+				        //added by Mike, 20170413
+						finish();    
+						Intent toUsbongDecisionTreeEngineActivityIntent = new Intent(AddItemActivity.this, UsbongDecisionTreeEngineActivity.class);
+						toUsbongDecisionTreeEngineActivityIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); 
+						startActivity(toUsbongDecisionTreeEngineActivityIntent);
 					}
 				}					
     	});    	
@@ -270,24 +351,14 @@ public class AddItemActivity extends AppCompatActivity/*Activity*/
 			bookTitleTextView.setBackgroundColor(Color.parseColor("#EEEEEE")); 
 		}
 
-    	TextView firstNameOfPrincipalAuthorTextView = ((TextView)findViewById(R.id.first_name_of_principal_author));
-		String firstNameOfPrincipalAuthor = firstNameOfPrincipalAuthorTextView.getText().toString();	
+    	TextView nameOfPrincipalAuthorTextView = ((TextView)findViewById(R.id.name_of_principal_author));
+		String firstNameOfPrincipalAuthor = nameOfPrincipalAuthorTextView.getText().toString();	
 		if (firstNameOfPrincipalAuthor.trim().equals("")) {
-			firstNameOfPrincipalAuthorTextView.setBackgroundColor(Color.parseColor("#fff9b6")); 
+			nameOfPrincipalAuthorTextView.setBackgroundColor(Color.parseColor("#fff9b6")); 
 			allFieldsAreFilledUp=false;
 		}
 		else {
-			firstNameOfPrincipalAuthorTextView.setBackgroundColor(Color.parseColor("#EEEEEE")); 
-		}
-
-    	TextView surnameOfPrincipalAuthorTextView = ((TextView)findViewById(R.id.surname_of_principal_author));
-		String surnameOfPrincipalAuthor = surnameOfPrincipalAuthorTextView.getText().toString();	
-		if (surnameOfPrincipalAuthor.trim().equals("")) {
-			surnameOfPrincipalAuthorTextView.setBackgroundColor(Color.parseColor("#fff9b6")); 
-			allFieldsAreFilledUp=false;
-		}
-		else {
-			surnameOfPrincipalAuthorTextView.setBackgroundColor(Color.parseColor("#EEEEEE")); 
+			nameOfPrincipalAuthorTextView.setBackgroundColor(Color.parseColor("#EEEEEE")); 
 		}
 
     	TextView priceTextView = ((TextView)findViewById(R.id.price));

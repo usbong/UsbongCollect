@@ -17,7 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.Window;
 import usbong.android.multimedia.graphics.MyCanvas;
-import usbong.android.specialty_bookstore.R;
+import usbong.android.collect.R;
 import usbong.android.utils.UsbongUtils;
 
 public class PaintActivity extends Activity
