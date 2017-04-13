@@ -146,7 +146,7 @@ public class BuyActivity extends AppCompatActivity/*Activity*/
         	productDetails = myTextImageDisplayTextView.getText().toString();//added by Mike, 20170221
 
     		ImageView myTextImageDisplayImageView = (ImageView)findViewById(R.id.image_display_imageview);
-    		
+
     		String path = UsbongUtils.USBONG_TREES_FILE_PATH + UsbongUtils.currCategory+"/"+getIntent().getStringExtra(UsbongConstants.ITEM_IMAGE_NAME);
     		File imageFile = new File(path);	                    
             if(imageFile.exists())

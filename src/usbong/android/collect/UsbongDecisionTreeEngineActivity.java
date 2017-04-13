@@ -98,7 +98,7 @@ import com.google.android.youtube.player.YouTubePlayerFragment;
 //@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class UsbongDecisionTreeEngineActivity extends AppCompatActivity implements TextToSpeech.OnInitListener{
 	//added by Mike, 20170330
-	private String currCategory = UsbongConstants.ITEMS_LIST_BOOKS;
+//	private String currCategory = UsbongConstants.ITEMS_LIST_BOOKS;
 //	private static final boolean UsbongUtils.USE_UNESCAPE=true; //allows the use of \n (new line) in the decision tree
 
 //	private static boolean USE_ENG_ONLY=true; //uses English only	
@@ -249,6 +249,9 @@ public class UsbongDecisionTreeEngineActivity extends AppCompatActivity implemen
 	//added by Mike, 20170216
 	private BuyActivity myBuyActivity;
 	
+	//added by Mike, 20170413
+	private String imageFileName;
+	
 	private static boolean hasPerformedInit;
 	
 //	@SuppressLint("InlinedApi")
@@ -397,7 +400,7 @@ public class UsbongDecisionTreeEngineActivity extends AppCompatActivity implemen
       			UsbongUtils.createFolderInSDCard(this, UsbongConstants.ITEMS_LIST_BOOKS);    			
       	        ArrayList<String> listOfTreesArrayList = UsbongUtils.getItemArrayList(UsbongUtils.USBONG_TREES_FILE_PATH +UsbongConstants.ITEMS_LIST_BOOKS+".txt");
       	        for (int i=0; i< listOfTreesArrayList.size(); i++) {
-      	            final String imageFileName = listOfTreesArrayList.get(i).toString().substring(0, listOfTreesArrayList.get(i).indexOf("\nAuthor:"))
+      	            imageFileName = listOfTreesArrayList.get(i).toString().substring(0, listOfTreesArrayList.get(i).indexOf("\nAuthor:"))
       	            		.replace("Title: ","")
       	            		.replace("f","")
       	            		.replace("'","")
@@ -409,7 +412,7 @@ public class UsbongDecisionTreeEngineActivity extends AppCompatActivity implemen
       			UsbongUtils.createFolderInSDCard(this, UsbongConstants.ITEMS_LIST_COMBOS);    			
       	        listOfTreesArrayList = UsbongUtils.getItemArrayList(UsbongUtils.USBONG_TREES_FILE_PATH +UsbongConstants.ITEMS_LIST_COMBOS+".txt");
       	        for (int i=0; i< listOfTreesArrayList.size(); i++) {
-      	            final String imageFileName = listOfTreesArrayList.get(i).toString().substring(0, listOfTreesArrayList.get(i).indexOf("\nAuthor:"))
+      	            imageFileName = listOfTreesArrayList.get(i).toString().substring(0, listOfTreesArrayList.get(i).indexOf("\nAuthor:"))
       	            		.replace("Title: ","")
       	            		.replace("f","")
       	            		.replace("'","")
@@ -666,7 +669,7 @@ public class UsbongDecisionTreeEngineActivity extends AppCompatActivity implemen
     
     //added by Mike, 20170330
     public void initTreeLoader(String currCategory) {
-        this.currCategory = currCategory;
+        UsbongUtils.currCategory = currCategory;
         initTreeLoader();
     }
     
@@ -692,7 +695,7 @@ public class UsbongDecisionTreeEngineActivity extends AppCompatActivity implemen
             }
         });    
 
-        if (currCategory.equals(UsbongConstants.ITEMS_LIST_BOOKS)) {
+        if (UsbongUtils.currCategory.equals(UsbongConstants.ITEMS_LIST_BOOKS)) {
             booksButton.setTypeface(Typeface.DEFAULT_BOLD);
             combosButton.setTypeface(Typeface.DEFAULT);
         }
@@ -705,10 +708,10 @@ public class UsbongDecisionTreeEngineActivity extends AppCompatActivity implemen
 
 //		listOfTreesArrayList = UsbongUtils.getTreeArrayList(UsbongUtils.USBONG_TREES_FILE_PATH);			
 //        listOfTreesArrayList = UsbongUtils.getItemArrayList(UsbongUtils.USBONG_TREES_FILE_PATH + UsbongConstants.ITEMS_LIST+".txt");
-        listOfTreesArrayList = UsbongUtils.getItemArrayList(UsbongUtils.USBONG_TREES_FILE_PATH + currCategory+".txt");
+        listOfTreesArrayList = UsbongUtils.getItemArrayList(UsbongUtils.USBONG_TREES_FILE_PATH + UsbongUtils.currCategory+".txt");
 
 
-        if (currCategory==UsbongConstants.ITEMS_LIST_BOOKS) {
+        if (UsbongUtils.currCategory==UsbongConstants.ITEMS_LIST_BOOKS) {
     		mCustomAdapter = new CustomDataAdapter(this, R.layout.tree_loader, listOfTreesArrayList);
         }
         else { //combo
@@ -3517,7 +3520,7 @@ public class UsbongDecisionTreeEngineActivity extends AppCompatActivity implemen
                 View v = convertView;
                 if (v == null) {
                     LayoutInflater vi = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                    if (currCategory==UsbongConstants.ITEMS_LIST_BOOKS) {
+                    if (UsbongUtils.currCategory==UsbongConstants.ITEMS_LIST_BOOKS) {
                         v = vi.inflate(R.layout.tree_loader, null);
                     }
                     else { //combo
@@ -3540,7 +3543,7 @@ public class UsbongDecisionTreeEngineActivity extends AppCompatActivity implemen
 	            		//Reference: http://www.anddev.org/tinytut_-_get_resources_by_name__getidentifier_-t460.html; last accessed 14 Sept 2011
 	                    Resources myRes = instance.getResources();
 */	                    
-	                    final String imageFileName = o.toString().substring(0, o.toString().indexOf("\nAuthor:"))
+	                    imageFileName = o.toString().substring(0, o.toString().indexOf("\nAuthor:"))
 	                    		.replace("Title: ","")
 	                    		.replace("f","")
 	                    		.replace("'","")
@@ -3550,7 +3553,7 @@ public class UsbongDecisionTreeEngineActivity extends AppCompatActivity implemen
 */
 	            		ImageView image = (ImageView) v.findViewById(R.id.tree_item_image_view);
 
-	            		String path = UsbongUtils.USBONG_TREES_FILE_PATH + currCategory+"/"+imageFileName;
+	            		String path = UsbongUtils.USBONG_TREES_FILE_PATH + UsbongUtils.currCategory+"/"+imageFileName;
 	            		File imageFile = new File(path);	                    
 	                    if(imageFile.exists())
 	                    {	                    
