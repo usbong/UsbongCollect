@@ -362,11 +362,20 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 	            matrix.postRotate(90);
 	            Bitmap myBitmapRotated = Bitmap.createBitmap(myImage, 0, 0, myImage.getWidth(), myImage.getHeight(), matrix, true);
 
-	            myBitmapRotated.compress(CompressFormat.JPEG, quality, bos);
+	            //added by Mike, 20170414
+        		//reduce to 70% size; bitmaps produce larger than actual image size
+            	Bitmap rescaledMyBitmap = Bitmap.createScaledBitmap(
+            								myBitmapRotated, 
+            								264,
+            								264*myBitmapRotated.getHeight()/myBitmapRotated.getWidth(), 
+            								false);
+
+            	rescaledMyBitmap.compress(CompressFormat.JPEG, quality, bos);
+//	            myBitmapRotated.compress(CompressFormat.JPEG, quality, bos);
 
 /*	            //commented out by Mike, 20160119
 				myImage.compress(CompressFormat.JPEG, quality, bos);
-*/				
+*/					            
 				bos.flush();
 				bos.close();
 
