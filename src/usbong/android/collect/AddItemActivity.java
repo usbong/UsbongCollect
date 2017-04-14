@@ -14,14 +14,15 @@
  */
 package usbong.android.collect;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import usbong.android.features.node.QRCodeReaderActivity;
 import usbong.android.utils.UsbongConstants;
 import usbong.android.utils.UsbongUtils;
 import android.app.Activity;
@@ -30,19 +31,16 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatRadioButton;
 import android.text.InputType;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -54,7 +52,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -68,6 +65,11 @@ public class AddItemActivity extends AppCompatActivity/*Activity*/
 	//added by Mike, 20170406
     private Button booksButton;
     private Button combosButton;
+    
+    //added by Mike, 20170414
+    private Button rotateCapturedPhotoButton;
+    private final int DEFAULT_ROTATION=-90;
+    private int rotation=0;
 	
 	private boolean isSendingData;
 
@@ -213,6 +215,63 @@ public class AddItemActivity extends AppCompatActivity/*Activity*/
             }
         });    
 
+        rotateCapturedPhotoButton = (Button)findViewById(R.id.rotate_captured_photo_button);
+        rotateCapturedPhotoButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+        		rotation=(rotation+DEFAULT_ROTATION)%360;
+            	myImageView.setRotation(rotation); //added by Mike, rotate counter-clockwise once        	        		
+/*
+            	if (!hasRotatedPhoto) {
+            		hasRotatedPhoto=true;
+            		myImageView.setRotation(-90); //added by Mike, rotate counter-clockwise once        	        		
+            	}
+            	else {
+            		hasRotatedPhoto=false;
+            		myImageView.setRotation(90); //added by Mike, rotate clockwise once        	        		
+            	}
+*/            	
+/*
+            	String path = UsbongUtils.BASE_FILE_PATH_TEMP + myPictureName +".jpg";
+	        	Bitmap myBitmap = BitmapFactory.decodeFile(path);
+
+	        	if(myBitmap != null)
+	        	{
+//	        		myImageView.setImageBitmap(myBitmap);
+	        		myImageView.setRotation(-90); //added by Mike, rotate counter-clockwise once        	        		
+
+	        		//save rotated image in the sdcard
+	        		try {
+		    			File sdImageMainDirectory = new File(UsbongUtils.BASE_FILE_PATH_TEMP);
+						File outputFile= new File(sdImageMainDirectory, myPictureName  +".jpg" );
+		        		
+		        		FileOutputStream fileOutputStream = new FileOutputStream(outputFile);
+					  	  
+						BufferedOutputStream bos = new BufferedOutputStream(
+								fileOutputStream);
+		        		
+		        		Matrix matrix = new Matrix();
+			            matrix.postRotate(-90);
+			            Bitmap myBitmapRotated = Bitmap.createBitmap(myBitmap, 0, 0, myBitmap.getWidth(), myBitmap.getHeight(), matrix, true);
+			            myBitmapRotated.compress(CompressFormat.JPEG, 50, bos); //50 quality
+			            
+						bos.flush();
+						bos.close();
+						
+						File imageFile = new File(UsbongUtils.BASE_FILE_PATH_TEMP + myPictureName+".jpg");				
+						
+						if(imageFile.exists())
+						{
+							System.out.println("FILE EXISTS!");
+						}	        			
+	        		}
+	        		catch (Exception e) {
+	        			e.printStackTrace();
+	        		}
+	 			}
+*/	 			
+            }
+        });    
                 
     	//added by Mike, 20170403
     	addButton = (Button)findViewById(R.id.add_button);    	
@@ -275,9 +334,48 @@ public class AddItemActivity extends AppCompatActivity/*Activity*/
 				 			e.printStackTrace();
 				 		}	
 
+				    	//added by Mike, 20170414
+				       	String path = UsbongUtils.BASE_FILE_PATH_TEMP + myPictureName +".jpg";
+			        	Bitmap myBitmap = BitmapFactory.decodeFile(path);
+
+			        	if(myBitmap != null)
+			        	{
+//			        		myImageView.setImageBitmap(myBitmap);
+			        		myImageView.setRotation(rotation); //added by Mike, rotate counter-clockwise once        	        		
+
+			        		//save rotated image in the sdcard
+			        		try {
+				    			File sdImageMainDirectory = new File(UsbongUtils.BASE_FILE_PATH_TEMP);
+								File outputFile= new File(sdImageMainDirectory, myPictureName  +".jpg" );
+				        		
+				        		FileOutputStream fileOutputStream = new FileOutputStream(outputFile);
+							  	  
+								BufferedOutputStream bos = new BufferedOutputStream(
+										fileOutputStream);
+				        		
+				        		Matrix matrix = new Matrix();
+					            matrix.postRotate(-90);
+					            Bitmap myBitmapRotated = Bitmap.createBitmap(myBitmap, 0, 0, myBitmap.getWidth(), myBitmap.getHeight(), matrix, true);
+					            myBitmapRotated.compress(CompressFormat.JPEG, 50, bos); //50 quality
+					            
+								bos.flush();
+								bos.close();
+								
+								File imageFile = new File(UsbongUtils.BASE_FILE_PATH_TEMP + myPictureName+".jpg");				
+								
+								if(imageFile.exists())
+								{
+									System.out.println("FILE EXISTS!");
+								}	        			
+			        		}
+			        		catch (Exception e) {
+			        			e.printStackTrace();
+			        		}
+			 			}
+			        	
 				    	//added by Mike, 20170406
 				    	//copy image file to correct destination
-						String path = UsbongUtils.BASE_FILE_PATH_TEMP + myPictureName +".jpg";								
+//						String path = UsbongUtils.BASE_FILE_PATH_TEMP + myPictureName +".jpg";								
 						String destDir = UsbongUtils.USBONG_TREES_FILE_PATH+UsbongUtils.currCategory+"/";
 						String destFilename = ((EditText)findViewById(R.id.book_title)).getText().toString()+".jpg";				    	
 						
@@ -287,8 +385,7 @@ public class AddItemActivity extends AppCompatActivity/*Activity*/
 				        {
 				        	UsbongUtils.copyFileToDestInSDCard(myPictureName +".jpg", UsbongUtils.BASE_FILE_PATH_TEMP, destDir);				        
 				    	}
-				        imageFile.renameTo(new File(destDir, destFilename));
-				    	
+				        imageFile.renameTo(new File(destDir, destFilename));				        
 /*					    
 					    //added by Mike, 20170310
 						//Reference: http://stackoverflow.com/questions/2264622/android-multiple-email-attachments-using-intent

@@ -73,8 +73,13 @@
 				style="@style/UsbongCameraImageView"
 				android:layout_marginTop="14dp"
 				android:layout_marginBottom="14dp"
-				android:layout_gravity="center_horizontal"
-				android:contentDescription="book photo"/>		   			   	
+				android:layout_gravity="center_horizontal|center_vertical"
+				android:contentDescription="book photo"/>	
+			<Button android:id="@+id/rotate_captured_photo_button"
+			    style="@style/UsbongPhotoCaptureButton"	    	
+				android:background="@drawable/button_rotate"	
+			    android:layout_width="wrap_content"
+			    android:layout_marginTop="14dp"/>	   			   	
 		   	<EditText
 	        style="@style/UsbongLoginEditText"
 	        android:id="@+id/name_of_principal_author"
