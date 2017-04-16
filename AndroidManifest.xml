@@ -46,6 +46,9 @@
                 android:value="UsbongMainActivity" />
         </activity>
 -->        
+        <activity android:name="DeleteEditActivity" android:screenOrientation="portrait"
+            	  android:theme="@style/ThemeHoloWithActionBar">
+        </activity>
         <activity android:name="BuyActivity" android:screenOrientation="portrait"
             	  android:theme="@style/ThemeHoloWithActionBar">
         </activity>

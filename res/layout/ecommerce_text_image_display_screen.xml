@@ -38,11 +38,17 @@
 	</LinearLayout>	
 	</ScrollView>	
 	<LinearLayout
-		style="@style/UsbongDefaultBuySellRequestButtonLayout">	
-		<Button android:id="@+id/confirm_button"
-		    style="@style/UsbongDefaultBuySellRequestButton"
-			android:text="@string/buy" 
-			android:layout_width="256dp"
-			android:background="@drawable/button_yellow"/>		    
+		style="@style/UsbongDefaultBackNextButtonLayout">	
+	    <Button android:id="@+id/delete_button"
+		    style="@style/UsbongDefaultBackNextButton"
+		    android:text="Delete"
+		    android:background="@drawable/button_yellow"
+		    />
+		    
+	   	<Button android:id="@+id/edit_button"
+		    style="@style/UsbongDefaultBackNextButton"
+		    android:text="Edit"
+		    android:background="@drawable/button_yellow"		    
+		    />	    
 	</LinearLayout>	
 </LinearLayout>
