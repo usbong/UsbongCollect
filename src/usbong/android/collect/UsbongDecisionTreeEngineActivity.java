@@ -248,10 +248,7 @@ public class UsbongDecisionTreeEngineActivity extends AppCompatActivity implemen
 /*		
 	//added by Mike, 20170216
 	private BuyActivity myBuyActivity;
-*/	
-	//added by Mike, 20170413
-	private String imageFileName;
-	
+*/		
 	private static boolean hasPerformedInit;
 	
 //	@SuppressLint("InlinedApi")
@@ -3543,7 +3540,7 @@ public class UsbongDecisionTreeEngineActivity extends AppCompatActivity implemen
 	            		//Reference: http://www.anddev.org/tinytut_-_get_resources_by_name__getidentifier_-t460.html; last accessed 14 Sept 2011
 	                    Resources myRes = instance.getResources();
 */	                    
-	                    imageFileName = o.toString().substring(0, o.toString().indexOf("\nAuthor:"))
+	                    final String imageFileName = o.toString().substring(0, o.toString().indexOf("\nAuthor:"))
 	                    		.replace("Title: ","")
 	                    		.replace("Åf","")
 	                    		.replace("'","")
@@ -3623,11 +3620,19 @@ public class UsbongDecisionTreeEngineActivity extends AppCompatActivity implemen
                         		image.setImageDrawable(myDrawableImage);	
                 				initParser(UsbongConstants.TREE_TYPE_BUY); //added by Mike, 20160202          				                	
 */
+/*                				
                 				//added by Mike, 20170216
 	            				Intent toBuyActivityIntent = new Intent().setClass(getInstance(), BuyActivity.class);
 	            				toBuyActivityIntent.putExtra(UsbongConstants.ITEM_VARIABLE_NAME, s);
 	            				toBuyActivityIntent.putExtra(UsbongConstants.ITEM_IMAGE_NAME, imageFileName);
 	            				startActivityForResult(toBuyActivityIntent,1);
+*/
+                				//added by Mike, 20170416
+	            				Intent toDeleteEditActivityIntent = new Intent().setClass(getInstance(), DeleteEditActivity.class);
+	            				toDeleteEditActivityIntent.putExtra(UsbongConstants.ITEM_VARIABLE_NAME, s);
+	            				toDeleteEditActivityIntent.putExtra(UsbongConstants.ITEM_IMAGE_NAME, imageFileName);
+	            				startActivityForResult(toDeleteEditActivityIntent,1);
+
                 			}
                 		});
                 	}

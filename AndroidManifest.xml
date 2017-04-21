@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="usbong.android.collect"
       android:versionCode="1"
-      android:versionName="1.0.0-20170401"
+      android:versionName="1.0.0-20170421"
       android:installLocation="auto"      
 >
 
