@@ -248,7 +248,10 @@ public class UsbongDecisionTreeEngineActivity extends AppCompatActivity implemen
 /*		
 	//added by Mike, 20170216
 	private BuyActivity myBuyActivity;
-*/		
+*/	
+	//added by Mike, 20170413
+	private String imageFileName;
+	
 	private static boolean hasPerformedInit;
 	
 //	@SuppressLint("InlinedApi")
