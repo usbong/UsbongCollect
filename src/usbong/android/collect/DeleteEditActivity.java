@@ -124,12 +124,29 @@ public class DeleteEditActivity extends AppCompatActivity/*Activity*/
     	UsbongUtils.deleteRecursive(new File(UsbongUtils.BASE_FILE_PATH_TEMP));
 
     	if (currScreen==ITEM_DETAILS_SCREEN) {
+/*    		
     		TextView myTextImageDisplayTextView = (TextView)findViewById(R.id.text_image_display_textview);
         	myTextImageDisplayTextView = (TextView) UsbongUtils.applyTagsInView(UsbongDecisionTreeEngineActivity.getInstance(), myTextImageDisplayTextView, UsbongUtils.IS_TEXTVIEW, getIntent().getStringExtra(UsbongConstants.ITEM_VARIABLE_NAME));        	
 
         	productDetails = myTextImageDisplayTextView.getText().toString();//added by Mike, 20170221
+*/
+        	productDetails = ((TextView) UsbongUtils.applyTagsInView(UsbongDecisionTreeEngineActivity.getInstance(), new TextView(this), UsbongUtils.IS_TEXTVIEW, getIntent().getStringExtra(UsbongConstants.ITEM_VARIABLE_NAME))).getText().toString();//added by Mike, 20170221
 
-    		ImageView myTextImageDisplayImageView = (ImageView)findViewById(R.id.image_display_imageview);
+		    String[] productDetailsArray = productDetails.split("\n"); 
+		    
+		    TextView titleTextView = (TextView)findViewById(R.id.title_textview);
+		    titleTextView.setText(productDetailsArray[0].replace("Title: ", ""));
+
+		    TextView authorTextView = (TextView)findViewById(R.id.author_textview);
+		    authorTextView.setText(productDetailsArray[1].replace("Author: ", ""));
+
+		    TextView priceTextView = (TextView)findViewById(R.id.price_textview);
+		    priceTextView.setText(productDetailsArray[2].replace("Price: ", ""));
+
+		    TextView languageTextView = (TextView)findViewById(R.id.language_textview);
+		    languageTextView.setText(productDetailsArray[3].replace("Language: ", ""));
+        	
+        	ImageView myTextImageDisplayImageView = (ImageView)findViewById(R.id.image_display_imageview);
 
     		String path = UsbongUtils.USBONG_TREES_FILE_PATH + UsbongUtils.currCategory+"/"+getIntent().getStringExtra(UsbongConstants.ITEM_IMAGE_NAME);
     		File imageFile = new File(path);	                    
@@ -177,157 +194,50 @@ public class DeleteEditActivity extends AppCompatActivity/*Activity*/
         		editButton.setOnClickListener(new OnClickListener() {
         			@Override
         			public void onClick(View v) {		
-        				//TODO edit item details
+        				currScreen = EDIT_SCREEN;
+        				init();        			    
         			}
             	});    	    		
         	}
     	}
     	else { //if edit screen
-/*    		
-    		//if account screen
-		    //Reference: http://stackoverflow.com/questions/23024831/android-shared-preferences-example
-	        //; last accessed: 20150609
-	        //answer by Elenasys
-	        //added by Mike, 20150207
-	        SharedPreferences prefs = getSharedPreferences(UsbongConstants.MY_ACCOUNT_DETAILS, MODE_PRIVATE);
-	        if (prefs!=null) {
-		      ((TextView)findViewById(R.id.first_name)).setText(prefs.getString("firstName", ""));//"" is the default value.
-		      ((TextView)findViewById(R.id.surname)).setText(prefs.getString("surname", "")); //"" is the default value.
-		      ((TextView)findViewById(R.id.contact_number)).setText(prefs.getString("contactNumber", "")); //"" is the default value
-		      
-		      //added by Mike, 20170223
-		      RadioGroup preferenceRadioButtonGroup = ((RadioGroup)findViewById(R.id.preference_radiogroup));
-			  ((RadioButton)preferenceRadioButtonGroup.getChildAt(prefs.getInt("preference", UsbongConstants.defaultPreference))).setChecked(true);
-		      	
-			  ((TextView)findViewById(R.id.address)).setText(prefs.getString("shippingAddress", "")); //"" is the default value
+			//TODO edit item details
+		    setContentView(R.layout.ecommerce_text_image_display_screen_edit);	        
 
-		      //added by Mike, 20170223
-			  RadioGroup modeOfPaymentRadioButtonGroup = ((RadioGroup)findViewById(R.id.mode_of_payment_radiogroup));
-			  ((RadioButton)modeOfPaymentRadioButtonGroup.getChildAt(prefs.getInt("modeOfPayment", UsbongConstants.defaultModeOfPayment))).setChecked(true);
-	        }
-*/	        
-    	}    	
-/*
-    	//added by Mike, 20160126
-    	confirmButton = (Button)findViewById(R.id.confirm_button);    	
-    	confirmButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {		
-				if (currScreen==BUY_SCREEN) {
-					currScreen=ACCOUNT_SCREEN;
-					setContentView(R.layout.account);	
-					init();
-				}
-				else {
-					if (verifyFields()) {			
-						//save data 
-				        //Reference: http://stackoverflow.com/questions/23024831/android-shared-preferences-example
-				        //; last accessed: 20150609
-				        //answer by Elenasys
-				        //added by Mike, 20170207
-				        SharedPreferences.Editor editor = getSharedPreferences(UsbongConstants.MY_ACCOUNT_DETAILS, MODE_PRIVATE).edit();
-				        editor.putString("firstName", ((TextView)findViewById(R.id.first_name)).getText().toString());
-				        editor.putString("surname", ((TextView)findViewById(R.id.surname)).getText().toString());
-				        editor.putString("contactNumber", ((TextView)findViewById(R.id.contact_number)).getText().toString());
+		    String[] productDetailsArray = productDetails.split("\n"); 
+		    
+		    EditText titleEditText = (EditText)findViewById(R.id.title_edittext);
+		    titleEditText.setText(productDetailsArray[0].replace("Title: ", ""));
 
-				        RadioGroup radioButtonGroup = (RadioGroup)findViewById(R.id.preference_radiogroup);				        		
-						for (int i=0; i< radioButtonGroup.getChildCount(); i++) {
-							if (((RadioButton)radioButtonGroup.getChildAt(i)).isChecked()) {
-								currPreference=i;
-							}
-						}
-						editor.putInt("preference", currPreference); //added by Mike, 20170223				        
-						
-				        editor.putString("shippingAddress", ((TextView)findViewById(R.id.address)).getText().toString());
-						
-						RadioGroup paymentMethodRadioButtonGroup = (RadioGroup)findViewById(R.id.mode_of_payment_radiogroup);
-						for (int i=0; i< paymentMethodRadioButtonGroup.getChildCount(); i++) {
-							if (((RadioButton)paymentMethodRadioButtonGroup.getChildAt(i)).isChecked()) {
-								currModeOfPayment=i;
-							}
-						}
-						editor.putInt("modeOfPayment", currModeOfPayment); //added by Mike, 20170223
-				        editor.commit();				    	
-										        
-						StringBuffer buySummary = new StringBuffer();
-						buySummary.append("-Purchase Order Summary-\n");					
-						buySummary.append(productDetails+"\n--\n");
-											
-						buySummary.append("Customer Name: "+
-								((TextView)findViewById(R.id.surname)).getText().toString()+", "+
-								((TextView)findViewById(R.id.first_name)).getText().toString()+"\n");    	
-	
-						buySummary.append("Contact Number: "+
-								((TextView)findViewById(R.id.contact_number)).getText().toString()+"\n");    	
+		    EditText authorEditText = (EditText)findViewById(R.id.author_edittext);
+		    authorEditText.setText(productDetailsArray[1].replace("Author: ", ""));
 
-						String quantity = ((TextView)findViewById(R.id.quantity)).getText().toString();
-						if (quantity.trim().equals("")) {
-							buySummary.append("Quantity: "+ "1"
-									+"\n");    	    		
-    					}
-						else {
-							buySummary.append("Quantity: "+ quantity
-									+"\n");    	    									
-						}
+		    EditText priceEditText = (EditText)findViewById(R.id.price_edittext);
+		    priceEditText.setText(productDetailsArray[2].replace("Price: ", ""));
 
-						
-//						RadioGroup radioButtonGroup = (RadioGroup)findViewById(R.id.preference_radiogroup);
-						int radioButtonID = radioButtonGroup.getCheckedRadioButtonId();				
-	//					RadioButton r = (RadioButton) radioButtonGroup.getChildAt(radioButtonID); 
-						RadioButton radioButton = (RadioButton) radioButtonGroup.findViewById(radioButtonID);
-						String selectedText = radioButton.getText().toString();	 
-						buySummary.append("Preference: "+selectedText+"\n");    	
-	
-						buySummary.append("Address: "+
-								((TextView)findViewById(R.id.address)).getText().toString()+"\n");    	
-						
-//						RadioGroup paymentMethodRadioButtonGroup = (RadioGroup)findViewById(R.id.mode_of_payment_radiogroup);
-						int paymentMethodRadioButtonID = paymentMethodRadioButtonGroup.getCheckedRadioButtonId();					
-						RadioButton paymentMethodRadioButton = (RadioButton) paymentMethodRadioButtonGroup.findViewById(paymentMethodRadioButtonID);
-						String paymentMethodSelectedText = paymentMethodRadioButton.getText().toString();	 
-	
-						buySummary.append("Payment Method: "+paymentMethodSelectedText+"\n");    	
-	
-						String additionalInstructionsString = ((TextView)findViewById(R.id.additional_instructions)).getText().toString();					
-						if (additionalInstructionsString.trim().equals("")) {
-							buySummary.append("Additional Instructions: "+
-									"N/A\n");    							
-						}
-						else {
-							buySummary.append("Additional Instructions: "+
-									additionalInstructionsString+"\n");    							
-						}
-						
-						String additionalInquiriesString = ((TextView)findViewById(R.id.additional_inquiries)).getText().toString();					
-						if (additionalInquiriesString.trim().equals("")) {
-							buySummary.append("Additional Inquiries: "+
-									"N/A\n");    							
-						}
-						else {
-							buySummary.append("Additional Inquiries: "+
-									additionalInquiriesString+"\n");    							
-						}
-						buySummary.append("-End of Summary-");    							
-											
-						//http://stackoverflow.com/questions/2197741/how-can-i-send-emails-from-my-android-application;
-						//answer by: Jeremy Logan, 20100204
-						//added by Mike, 20170220
-					    Intent i = new Intent(Intent.ACTION_SEND);
-					    i.setType("message/rfc822"); //remove all non-email apps that support send intent from chooser
-					    i.putExtra(Intent.EXTRA_EMAIL  , new String[]{UsbongConstants.EMAIL_ADDRESS});
-					    i.putExtra(Intent.EXTRA_SUBJECT, "Purchase Order: "+productDetails.substring(0,productDetails.indexOf("\n")).replace("Title: ",""));
-					    i.putExtra(Intent.EXTRA_TEXT   , buySummary.toString());
-					    try {
-					    	isSendingData=true; //added by Mike, 20170225
-					        startActivityForResult(Intent.createChooser(i, "Sending email..."), 1); 
-					    } catch (android.content.ActivityNotFoundException ex) {
-					        Toast.makeText(DeleteEditActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
-					    }	
-					}
-				}										    
-			}
-    	});    	
-*/	
+		    EditText languageEditText = (EditText)findViewById(R.id.language_edittext);
+		    languageEditText.setText(productDetailsArray[3].replace("Language: ", ""));
+		    
+    		ImageView myTextImageDisplayImageView = (ImageView)findViewById(R.id.image_display_imageview);
+
+    		String path = UsbongUtils.USBONG_TREES_FILE_PATH + UsbongUtils.currCategory+"/"+getIntent().getStringExtra(UsbongConstants.ITEM_IMAGE_NAME);
+    		File imageFile = new File(path);	                    
+            if(imageFile.exists())
+            {	                    
+            	Bitmap myBitmap = BitmapFactory.decodeFile(path);
+            	if(myBitmap != null)
+            	{
+            		//reduce to 70% size; bitmaps produce larger than actual image size
+                	Bitmap rescaledMyBitmap = Bitmap.createScaledBitmap(
+                								myBitmap, 
+                								myBitmap.getWidth()/10*7, 
+                								myBitmap.getHeight()/10*7, 
+                								false);
+                	myTextImageDisplayImageView.setImageBitmap(rescaledMyBitmap);
+     			}	             
+            	//Read more: http://www.brighthub.com/mobile/google-android/articles/64048.aspx#ixzz0yXLCazcU                	  
+            }    	
+    	}
     }
     
     public boolean verifyFields() {
